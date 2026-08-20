@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Universal Declarative Runtime</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <!-- ===================================================== -->
+    <!-- CACHE OFF -->
+    <!-- ===================================================== -->
+
+    <meta
+        http-equiv="Cache-Control"
+        content="no-cache, no-store, must-revalidate"
+    >
+
+    <meta
+        http-equiv="Pragma"
+        content="no-cache"
+    >
+
+    <meta
+        http-equiv="Expires"
+        content="0"
+    >
+
+    <!-- ===================================================== -->
+    <!-- SAFARI SUPPORT -->
+    <!-- ===================================================== -->
+
+    <script>
+
+        if (!window.requestIdleCallback){
+
+            window.requestIdleCallback = function(cb){
+
+                return setTimeout(function(){
+
+                    cb({
+
+                        didTimeout: false,
+
+                        timeRemaining: function(){
+
+                            return 0;
+
+                        }
+
+                    });
+
+                },1);
+
+            };
+
+        }
+
+    </script>
+
+    <!-- ===================================================== -->
+    <!-- DEBUG -->
+    <!-- ===================================================== -->
+
+    <script>
+
+        window.DEBUG = true;
+
+    </script>
+
+    <!-- ===================================================== -->
+    <!-- CSS -->
+    <!-- ===================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/styles.css?v=1"
+    >
+
+    <script src="js/utils/logger.js"></script>
+
+    <script src="js/runtime/router.js"></script>
+    <script src="js/runtime/programRegistry.js?v=1"></script>    
+    <script src="js/runtime/runtime.js"></script>
+
+<!-- Renderers -->
+<script src="js/ui/navigateRenderer.js"></script>
+
+<!-- Layouts -->
+<script src="js/layouts/navigationLayout.js"></script>    
+    <script src="js/ui/layoutRenderer.js"></script>
+    <script src="js/layouts/objectLayout.js"></script>
+    <script src="js/ui/fieldRenderer.js"></script>
+
+    <script src="js/utils/templateEngine.js"></script>
+    
+    <script src="js/resolvers/pathResolver.js"></script>
+    <script src="js/resolvers/dataResolver.js"></script>
+    
+    <script src="js/runtime/app.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+
+        <header id="topbar">
+
+            <div id="logo">
+
+                🌌 Universal Declarative Runtime
+
+            </div>
+
+            <nav id="navigation-bar"></nav>
+
+        </header>
+
+        <aside id="left-bar"></aside>
+
+        <main id="content-view"></main>
+
+        <aside id="right-bar"></aside>
+
+        <footer id="footer-bar"></footer>
+
+    </div>
+
+</body>
+
+</html>

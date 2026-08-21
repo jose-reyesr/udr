@@ -591,40 +591,62 @@ async function renderField({
         valueContainer
     );
     
-    if(field.selector){
-    
-        const button =
-            document.createElement("button");
-    
-        button.className =
-            "detail-button";
-    
-        button.innerText =
-            "🔍";
-    
-        button.onclick =
-            async () => {
+    if(field.relation){
 
-                await openSelector({
+        const select =
+            document.createElement(
+                "select"
+            );
 
-                    record,
+        await renderRelationCombo({
 
-                    field,
+            select,
 
-                    context
+            field,
 
-                });
+            record
 
-            };
+        });
 
         valueWrapper.appendChild(
-            button
+            select
         );
-    
+
     }
+    else if(field.selector){
     
-    row.appendChild(
-        valueWrapper
+            const button =
+                document.createElement("button");
+        
+            button.className =
+                "detail-button";
+        
+            button.innerText =
+                "🔍";
+        
+            button.onclick =
+                async () => {
+
+                    await openSelector({
+
+                        record,
+
+                        field,
+
+                        context
+
+                    });
+
+                };
+
+            valueWrapper.appendChild(
+                button
+            );
+    
+        }
+    
+        row.appendChild(
+            valueWrapper
     );
     
     //------------------------------------------
@@ -1935,6 +1957,88 @@ async function openSelector({
 
 }
 
+async function renderRelationCombo({
+
+    select,
+
+    field,
+
+    record
+
+}){
+
+    const relation =
+        field.relation;
+
+    const json =
+        await window
+            .jsonLoader
+            .load({
+
+                file:
+                    relation.source.file,
+
+                path:
+                    relation.source.path
+
+            });
+
+    const items =
+        json?.data || [];
+
+    for(const item of items){
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            item[
+                relation.valueField
+            ];
+
+        option.innerText =
+            item[
+                relation.textField
+            ];
+
+        if(
+
+            String(
+                record[
+                    field.campo
+                ]
+            ) ===
+
+            String(
+                option.value
+            )
+
+        ){
+
+            option.selected =
+                true;
+
+        }
+
+        select.appendChild(
+            option
+        );
+
+    }
+
+    select.onchange =
+        () => {
+
+            record[
+                field.campo
+            ] =
+                select.value;
+
+        };
+
+}
     window.edit = api;
 
     log("✅ editLayout registrado correctamente");

@@ -108,12 +108,14 @@
             if(!context.root){
     
                 context.root =
-                    await loadJSON({
-    
+                    await window.jsonLoader.load({
+
                         file: context.file,
+
                         path: context.path
-    
+
                     });
+
     
             }
     
@@ -190,6 +192,8 @@
                 );
     
             }
+
+            context.profileDefinition = profile;            
     
             //--------------------------------------------------
             // EXECUTE PROFILE
@@ -485,112 +489,112 @@
     // LOAD JSON
     //==================================================
     
-    async function loadJSON({
+    // async function loadJSON({
     
-        file = null,
-        path = ""
+    //     file = null,
+    //     path = ""
     
-    } = {}){
+    // } = {}){
     
-        try{
+    //     try{
     
-            if(!file){
+    //         if(!file){
     
-                throw new Error(
-                    "No se especificó el archivo."
-                );
+    //             throw new Error(
+    //                 "No se especificó el archivo."
+    //             );
     
-            }
+    //         }
     
-            //--------------------------------------------------
-            // RESOLVE PATH
-            //--------------------------------------------------
+    //         //--------------------------------------------------
+    //         // RESOLVE PATH
+    //         //--------------------------------------------------
     
-            const fullPath =
+    //         const fullPath =
     
-                window.pathResolver
-                    ?.resolve(
+    //             window.pathResolver
+    //                 ?.resolve(
     
-                        path,
+    //                     path,
     
-                        file
+    //                     file
     
-                    )
+    //                 )
     
-                ||
+    //             ||
     
-                file;
+    //             file;
     
-            // debug(
-            //     "Cargando JSON:",
-            //     fullPath
-            // );
+    //         // debug(
+    //         //     "Cargando JSON:",
+    //         //     fullPath
+    //         // );
     
-            //--------------------------------------------------
-            // DATALOADER
-            //--------------------------------------------------
+    //         //--------------------------------------------------
+    //         // DATALOADER
+    //         //--------------------------------------------------
     
-            if(
-                window.dataLoader?.load
-            ){
+    //         if(
+    //             window.dataLoader?.load
+    //         ){
     
-                const json =
-                    await window.dataLoader.load(
-                        fullPath
-                    );
+    //             const json =
+    //                 await window.dataLoader.load(
+    //                     fullPath
+    //                 );
     
-                if(json){
+    //             if(json){
     
-                    return json;
+    //                 return json;
     
-                }
+    //             }
     
-            }
+    //         }
     
-            //--------------------------------------------------
-            // FETCH
-            //--------------------------------------------------
+    //         //--------------------------------------------------
+    //         // FETCH
+    //         //--------------------------------------------------
     
-            const response =
-                await fetch(
+    //         const response =
+    //             await fetch(
     
-                    fullPath,
+    //                 fullPath,
     
-                    {
+    //                 {
     
-                        cache: "no-store"
+    //                     cache: "no-store"
     
-                    }
+    //                 }
     
-                );
+    //             );
     
-            if(
-                !response.ok
-            ){
+    //         if(
+    //             !response.ok
+    //         ){
     
-                throw new Error(
+    //             throw new Error(
     
-                    `HTTP ${response.status}`
+    //                 `HTTP ${response.status}`
     
-                );
+    //             );
     
-            }
+    //         }
     
-            return await response.json();
+    //         return await response.json();
     
-        }
-        catch(e){
+    //     }
+    //     catch(e){
     
-            error(
-                "loadJSON:",
-                e
-            );
+    //         error(
+    //             "loadJSON:",
+    //             e
+    //         );
     
-            throw e;
+    //         throw e;
     
-        }
+    //     }
     
-    }
+    // }
     
     //==================================================
     // END

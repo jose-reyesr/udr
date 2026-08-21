@@ -74,11 +74,11 @@ const api = {
 
     applyDataModif,
 
-    applyOperation,
+    applyOperation
 
-    serializeJson,
+    // serializeJson,
 
-    downloadJson
+    // downloadJson
 
 };
 
@@ -101,45 +101,51 @@ window.updateProgram = api;
     
         update = null,
     
-        data_modif = undefined
+        data_modif = undefined,
+
+        selectedId = null,
+
+        selectedField = null,
+
+        selectedValue = null
     
     } = {}){
     
         try{
     
-            debug(
-                "========== UPDATE PROGRAM / EXECUTE =========="
-            );
+            // debug(
+            //     "========== UPDATE PROGRAM / EXECUTE =========="
+            // );
     
-            debug(
-                "INPUT root:",
-                root
-            );
+            // debug(
+            //     "INPUT root:",
+            //     root
+            // );
     
-            debug(
-                "INPUT data_original:",
-                data_original
-            );
+            // debug(
+            //     "INPUT data_original:",
+            //     data_original
+            // );
     
-            debug(
-                "INPUT source:",
-                source
-            );
+            // debug(
+            //     "INPUT source:",
+            //     source
+            // );
     
-            debug(
-                "INPUT where:",
-                where
-            );
+            // debug(
+            //     "INPUT where:",
+            //     where
+            // );
     
-            debug(
-                "INPUT update:",
-                update
-            );
+            // debug(
+            //     "INPUT update:",
+            //     update
+            // );
     
-            debug(
-                "INPUT data_modif:",
-                data_modif
-            );
+            // debug(
+            //     "INPUT data_modif:",
+            //     data_modif
+            // );
     
     
             const result =
@@ -157,7 +163,13 @@ window.updateProgram = api;
     
                     update,
     
-                    data_modif
+                    data_modif,
+
+                    selectedId,
+
+                    selectedField,
+                    
+                    selectedValue
     
                 });
     
@@ -190,15 +202,16 @@ window.updateProgram = api;
             //--------------------------------------------------
     
             const downloaded =
-                downloadJson({
-    
-                    json:
-                        result,
-    
-                    fileName:
-                        "document.json"
-    
-                });
+                window.jsonDownloader
+                    ?.download({
+
+                        json:
+                            result,
+
+                        fileName:
+                            "document.json"
+
+                    });
     
     
             debug(
@@ -782,6 +795,32 @@ function applyOperation({
 
         }
 
+        if(
+
+            selectedId !== null &&
+
+            selectedField &&
+
+            selectedValue !== null
+
+        ){
+
+            return applySelectedUpdate({
+
+                json,
+
+                source,
+
+                selectedId,
+
+                selectedField,
+
+                selectedValue
+
+            });
+
+        }        
+
 
         //--------------------------------------------------
         // UPDATE
@@ -882,176 +921,240 @@ function applyOperation({
 
 }
 
-// ==================================================
-// SERIALIZE JSON
-// ==================================================
+// // ==================================================
+// // SERIALIZE JSON
+// // ==================================================
 
-function serializeJson({
+// function serializeJson({
 
-    json = null
+//     json = null
 
-} = {}){
+// } = {}){
 
-    try{
+//     try{
 
-        if(!json){
+//         if(!json){
 
-            warn(
-                "JSON para serializar no disponible."
-            );
+//             warn(
+//                 "JSON para serializar no disponible."
+//             );
 
-            return null;
+//             return null;
 
-        }
-
-
-        return JSON.stringify(
-            json,
-            null,
-            2
-        );
-
-    }
-    catch(e){
-
-        error(
-            "serializeJson:",
-            e
-        );
-
-        throw e;
-
-    }
-
-}
+//         }
 
 
-// ==================================================
-// DOWNLOAD JSON
-// ==================================================
+//         return JSON.stringify(
+//             json,
+//             null,
+//             2
+//         );
 
-function downloadJson({
+//     }
+//     catch(e){
+
+//         error(
+//             "serializeJson:",
+//             e
+//         );
+
+//         throw e;
+
+//     }
+
+// }
+
+
+// // ==================================================
+// // DOWNLOAD JSON
+// // ==================================================
+
+// function downloadJson({
+
+//     json = null,
+
+//     fileName = "updated.json"
+
+// } = {}){
+
+//     try{
+
+//         debug(
+//             "========== DOWNLOAD JSON =========="
+//         );
+
+//         debug(
+//             "fileName:",
+//             fileName
+//         );
+
+//         debug(
+//             "json:",
+//             json
+//         );
+
+
+//         const content =
+//             serializeJson({
+//                 json
+//             });
+
+
+//         debug(
+//             "serialized content:",
+//             content
+//         );
+
+
+//         if(content === null){
+
+//             warn(
+//                 "downloadJson: serializeJson regresó null."
+//             );
+
+//             return false;
+
+//         }
+
+
+//         const blob =
+//             new Blob(
+//                 [content],
+//                 {
+//                     type:
+//                         "application/json"
+//                 }
+//             );
+
+
+//         debug(
+//             "Blob creado:",
+//             blob
+//         );
+
+
+//         const url =
+//             URL.createObjectURL(
+//                 blob
+//             );
+
+
+//         debug(
+//             "Object URL creada:",
+//             url
+//         );
+
+
+//         const link =
+//             document.createElement(
+//                 "a"
+//             );
+
+
+//         link.href =
+//             url;
+
+//         link.download =
+//             fileName;
+
+
+//         document.body.appendChild(
+//             link
+//         );
+
+
+//         debug(
+//             "Iniciando descarga:",
+//             fileName
+//         );
+
+
+//         link.click();
+
+
+//         link.remove();
+
+//         URL.revokeObjectURL(
+//             url
+//         );
+
+
+//         debug(
+//             "Descarga completada."
+//         );
+
+
+//         return true;
+
+//     }
+//     catch(e){
+
+//         error(
+//             "downloadJson:",
+//             e
+//         );
+
+//         throw e;
+
+//     }
+
+// }
+
+
+function applySelectedUpdate({
 
     json = null,
 
-    fileName = "updated.json"
+    source = null,
+
+    selectedId = null,
+
+    selectedField = null,
+
+    selectedValue = null
 
 } = {}){
 
     try{
 
-        debug(
-            "========== DOWNLOAD JSON =========="
-        );
-
-        debug(
-            "fileName:",
-            fileName
-        );
-
-        debug(
-            "json:",
-            json
-        );
-
-
-        const content =
-            serializeJson({
+        const result =
+            structuredClone(
                 json
-            });
-
-
-        debug(
-            "serialized content:",
-            content
-        );
-
-
-        if(content === null){
-
-            warn(
-                "downloadJson: serializeJson regresó null."
             );
 
-            return false;
+        const data =
+            window.pathResolver
+                .getByPath(
+                    result,
+                    source.path
+                );
 
+        if(!Array.isArray(data)){
+            return null;
         }
 
-
-        const blob =
-            new Blob(
-                [content],
-                {
-                    type:
-                        "application/json"
-                }
+        const record =
+            data.find(
+                item =>
+                    String(item.id) ===
+                    String(selectedId)
             );
 
+        if(!record){
+            return null;
+        }
 
-        debug(
-            "Blob creado:",
-            blob
-        );
+        record[
+            selectedField
+        ] = selectedValue;
 
-
-        const url =
-            URL.createObjectURL(
-                blob
-            );
-
-
-        debug(
-            "Object URL creada:",
-            url
-        );
-
-
-        const link =
-            document.createElement(
-                "a"
-            );
-
-
-        link.href =
-            url;
-
-        link.download =
-            fileName;
-
-
-        document.body.appendChild(
-            link
-        );
-
-
-        debug(
-            "Iniciando descarga:",
-            fileName
-        );
-
-
-        link.click();
-
-
-        link.remove();
-
-        URL.revokeObjectURL(
-            url
-        );
-
-
-        debug(
-            "Descarga completada."
-        );
-
-
-        return true;
+        return result;
 
     }
     catch(e){
 
         error(
-            "downloadJson:",
+            "applySelectedUpdate:",
             e
         );
 
@@ -1060,8 +1163,5 @@ function downloadJson({
     }
 
 }
-
-
-
 
 })();

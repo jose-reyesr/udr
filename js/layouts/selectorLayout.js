@@ -831,15 +831,42 @@ function renderSelectorActions({
 // =====================================================
 
 async function saveSelection({
-
     context
-
 }){
 
-    console.log(
-        "Guardar selección",
-        context
-    );
+    const selection =
+        initializeSelection({
+            context
+        });
+
+    await window.navigateRenderer
+        ?.navigate({
+
+            html: "index.html",
+
+            source: {
+                file: "update.json"
+            },
+
+            parameters: {
+
+                profile:
+                    "update",
+
+                selectedId:
+                    context.selectedId,
+
+                selectedField:
+                    context.selectedField,
+
+                selectedValue:
+                    JSON.stringify(
+                        selection.selected
+                    )
+
+            }
+
+        });
 
 }
 

@@ -29,11 +29,21 @@
 
         try{
 
-            const layout =
+            const layoutSource =
+                context.profileDefinition?.layout
+                    ? context.root?.[
+                        context.profileDefinition.layout
+                    ]
+                    : context.datasets?.layout?.value;
 
-                context.datasets
-                    ?.layout
-                    ?.value;
+            const layout =
+                layoutSource;            
+
+            // const layout =
+
+            //     context.datasets
+            //         ?.layout
+            //         ?.value;
 
             if(!layout){
 

@@ -604,19 +604,19 @@ async function renderField({
     
         button.onclick =
             async () => {
-    
-                await window.selectorLayout?.open?.({
-    
+
+                await openSelector({
+
                     record,
-    
+
                     field,
-    
+
                     context
-    
+
                 });
-    
+
             };
-    
+
         valueWrapper.appendChild(
             button
         );
@@ -1854,6 +1854,85 @@ Archivo descargado.
     document.body.appendChild(
         div
     );
+}
+
+async function openSelector({
+
+    record,
+
+    field,
+
+    context
+
+}){
+
+    //--------------------------------------------------
+    // GENERAR UPDATE.JSON
+    //--------------------------------------------------
+
+    window.jsonDownloader.download({
+
+        json: {
+
+            root:
+                context.originalRoot,
+
+            source:
+                context.source
+
+        },
+
+        fileName:
+            "update.json"
+
+    });
+
+    //--------------------------------------------------
+    // DATOS DEL CAMPO
+    //--------------------------------------------------
+
+    const selectedId =
+        record?.id;
+
+    const selectedField =
+        field?.campo;
+
+    const selectedValue =
+        JSON.stringify(
+            record?.[
+                field.campo
+            ] || []
+        );
+
+    //--------------------------------------------------
+    // NAVEGAR A SELECTOR
+    //--------------------------------------------------
+
+    await window
+        .navigateRenderer
+        ?.navigate({
+
+            html:
+                "index.html",
+
+            source:
+                field.selector?.source,
+
+            parameters: {
+
+                profile:
+                    "selector",
+
+                selectedId,
+
+                selectedField,
+
+                selectedValue
+
+            }
+
+        });
+
 }
 
     window.edit = api;

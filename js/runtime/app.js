@@ -19,19 +19,31 @@
 
   function getRuntimeParams(){
 
-    const search = new URLSearchParams(
-        window.location.search
-    );
+    const search =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const context = {};
+
+    for(const [key, value] of search.entries()){
+
+        context[key] = value;
+
+    }
 
     return {
 
-        file: search.get("file"),
+        file:
+            search.get("file"),
 
-        path: search.get("path"),
+        path:
+            search.get("path"),
 
-        profile: search.get("profile"),
+        profile:
+            search.get("profile"),
 
-        context: {}
+        context
 
     };
 

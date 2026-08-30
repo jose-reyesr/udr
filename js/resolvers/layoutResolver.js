@@ -37,7 +37,18 @@
                     : context.datasets?.layout?.value;
 
             const layout =
-                layoutSource;            
+                layoutSource;       
+                
+                
+                debug(
+                    "LAYOUT PROFILE",
+                    context.profileDefinition?.layout
+                );
+                
+                debug(
+                    "LAYOUT SOURCE",
+                    layoutSource
+                );                
 
             // const layout =
 

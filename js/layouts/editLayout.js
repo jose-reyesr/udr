@@ -278,23 +278,35 @@
 
             "💾 Guardar";
 
-        saveButton.onclick = () =>
+            saveButton.onclick = () => {
 
-            window.updateProgram.execute({
-
-                root:
-                    context.originalRoot,
-            
-                data_original:
-                    context.originalRoot?.data,
-            
-                source:
-                    context.source,
-            
-                data_modif:
+                console.log(
+                    "context.currentDataset",
                     context.currentDataset
+                );
             
-            });
+                console.log(
+                    "context",
+                    context
+                );
+            
+                window.updateProgram.executeDirect({
+            
+                    root:
+                        context.originalRoot,
+            
+                    data_original:
+                        context.originalRoot?.data,
+            
+                    source:
+                        context.source,
+            
+                    data_modif:
+                        context.currentDataset
+            
+                });
+            
+            };
 
         actions.appendChild(
             saveButton
@@ -591,29 +603,38 @@ async function renderField({
         valueContainer
     );
     
-    if(field.relation){
+    const ui = field.selector?.ui;
+
+    if (ui === "combobox") {
 
         const select =
             document.createElement(
                 "select"
             );
 
-        await renderRelationCombo({
+            await renderRelationCombo({
 
-            select,
-
-            field,
-
-            record
-
-        });
+                select,
+            
+                field,
+            
+                record,
+            
+                valueContainer,
+            
+                context,
+            
+                schema
+            
+            });
 
         valueWrapper.appendChild(
             select
         );
 
-    }
-    else if(field.selector){
+    };
+
+    if(ui === "selector"){
     
             const button =
                 document.createElement("button");
@@ -825,10 +846,10 @@ async function renderFieldValue({
 
     if(field.selector){
 
-        console.log(
-            "SELECTOR DETECTADO",
-            field.campo
-        );
+        // console.log(
+        //     "SELECTOR DETECTADO",
+        //     field.campo
+        // );
     
     }    
 
@@ -956,10 +977,10 @@ async function renderObject({
 
         if(field.campo === "tipos_media"){
 
-            console.log(
-                "RENDERING TIPOS_MEDIA",
-                field
-            );
+            // console.log(
+            //     "RENDERING TIPOS_MEDIA",
+            //     field
+            // );
         
         }
 
@@ -1404,23 +1425,35 @@ function renderFooter({
     saveButton.innerText =
         "💾 Guardar";
 
-    saveButton.onclick = () =>
+        saveButton.onclick = () => {
 
-        window.updateProgram.execute({
-
-            root:
-                context.originalRoot,
-        
-            data_original:
-                context.originalRoot?.data,
-        
-            source:
-                context.source,
-        
-            data_modif:
+            console.log(
+                "context.currentDataset",
                 context.currentDataset
+            );
         
-        });
+            console.log(
+                "context",
+                context
+            );
+        
+            window.updateProgram.executeDirect({
+        
+                root:
+                    context.originalRoot,
+        
+                data_original:
+                    context.originalRoot?.data,
+        
+                source:
+                    context.source,
+        
+                data_modif:
+                    context.currentDataset
+        
+            });
+        
+        };
 
     footer.appendChild(
         saveButton
@@ -1888,26 +1921,43 @@ async function openSelector({
 
 }){
 
-    //--------------------------------------------------
-    // GENERAR UPDATE.JSON
-    //--------------------------------------------------
+    // alert("aqui");
 
-    window.jsonDownloader.download({
+    // console.log("PASO 1");
 
-        json: {
+    // debug("context", context);
+    // console.log("PASO 2");
 
-            root:
-                context.originalRoot,
+    // debug("context.originalRoot", context?.originalRoot);
+    // debug("context.source", context?.source);
+    // debug("jsonDownloader", window.jsonDownloader);
+    
+    try {
+    
+        // debug("GENERANDO UPDATE.JSON");
 
-            source:
-                context.source
+        const fileName = "update.json";
+    
+        const result = window.jsonDownloader.download({
+            json: {
+                ...context.originalRoot,
+                source: context.source
+            },
+            fileName: fileName
+        });
 
-        },
-
-        fileName:
-            "update.json"
-
-    });
+        showTerminalCommand(
+            fileName
+        );        
+    
+        // debug("DOWNLOAD RESULT", result);
+    
+    } catch(ex) {
+    
+        error("ERROR DOWNLOAD", ex);
+        alert(ex.message);
+    
+    }
 
     //--------------------------------------------------
     // DATOS DEL CAMPO
@@ -1919,16 +1969,27 @@ async function openSelector({
     const selectedField =
         field?.campo;
 
+        const currentValue =
+        record?.[
+            field.campo
+        ];
+    
     const selectedValue =
         JSON.stringify(
-            record?.[
-                field.campo
-            ] || []
+            Array.isArray(currentValue)
+                ? currentValue
+                : (
+                    currentValue
+                        ? [currentValue]
+                        : []
+                )
         );
 
     //--------------------------------------------------
     // NAVEGAR A SELECTOR
     //--------------------------------------------------
+
+    alert("Proceso Termino");
 
     await window
         .navigateRenderer
@@ -1938,7 +1999,7 @@ async function openSelector({
                 "index.html",
 
             source:
-                field.selector?.source,
+                field.relation?.source,
 
             parameters: {
 
@@ -1963,9 +2024,26 @@ async function renderRelationCombo({
 
     field,
 
-    record
+    record,
+
+    valueContainer,
+
+    context,
+
+    schema
 
 }){
+
+
+    debug(
+        "COMBO FIELD",
+        field
+    );
+    
+    debug(
+        "COMBO RELATION",
+        field?.relation
+    );
 
     const relation =
         field.relation;
@@ -1976,15 +2054,31 @@ async function renderRelationCombo({
             .load({
 
                 file:
-                    relation.source.file,
+                    field.relation?.source.file,
 
                 path:
-                    relation.source.path
+                    field.relation?.source.path
 
             });
 
-    const items =
-        json?.data || [];
+        const dataset =
+            json.definition.datasets.find(
+                d => d.id === "data"
+            );
+        
+        const items =
+            json[dataset.path] || [];
+
+
+        debug(
+            "COMBO JSON KEYS",
+            Object.keys(json || {})
+        );
+        
+        debug(
+            "COMBO JSON",
+            json
+        );        
 
     for(const item of items){
 
@@ -1993,14 +2087,17 @@ async function renderRelationCombo({
                 "option"
             );
 
+        const valueField =
+            Object.keys(
+                relation.where
+            )[0];
+        
         option.value =
-            item[
-                relation.valueField
-            ];
-
+            item[valueField];
+        
         option.innerText =
             item[
-                relation.textField
+                relation.displayField
             ];
 
         if(
@@ -2029,14 +2126,32 @@ async function renderRelationCombo({
     }
 
     select.onchange =
-        () => {
+    async () => {
 
-            record[
-                field.campo
-            ] =
-                select.value;
+        record[
+            field.campo
+        ] =
+            select.value;
 
-        };
+        valueContainer.innerHTML =
+            "";
+
+        await renderFieldValue({
+
+            container:
+                valueContainer,
+
+            record,
+
+            field,
+
+            schema,
+
+            context
+
+        });
+
+    };
 
 }
     window.edit = api;

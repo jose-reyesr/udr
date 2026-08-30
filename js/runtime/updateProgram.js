@@ -60,6 +60,8 @@ const api = {
 
     execute,
 
+    executeDirect,
+
     hasDataModif,
 
     matchWhere,
@@ -91,6 +93,45 @@ window.updateProgram = api;
 
     async function execute({
 
+        context = {}
+    
+    } = {}){
+    
+        return executeDirect({
+    
+            root:
+                context.root,
+    
+            data_original:
+                context.data_original,
+    
+            source:
+                context.source,
+    
+            where:
+                context.where,
+    
+            update:
+                context.update,
+    
+            data_modif:
+                context.data_modif,
+    
+            selectedId:
+                context.selectedId,
+    
+            selectedField:
+                context.selectedField,
+    
+            selectedValue:
+                context.selectedValue
+    
+        });
+    
+    }
+
+    async function executeDirect({
+
         root = null,
     
         data_original = null,
@@ -102,51 +143,16 @@ window.updateProgram = api;
         update = null,
     
         data_modif = undefined,
-
+    
         selectedId = null,
-
+    
         selectedField = null,
-
+    
         selectedValue = null
     
     } = {}){
     
         try{
-    
-            // debug(
-            //     "========== UPDATE PROGRAM / EXECUTE =========="
-            // );
-    
-            // debug(
-            //     "INPUT root:",
-            //     root
-            // );
-    
-            // debug(
-            //     "INPUT data_original:",
-            //     data_original
-            // );
-    
-            // debug(
-            //     "INPUT source:",
-            //     source
-            // );
-    
-            // debug(
-            //     "INPUT where:",
-            //     where
-            // );
-    
-            // debug(
-            //     "INPUT update:",
-            //     update
-            // );
-    
-            // debug(
-            //     "INPUT data_modif:",
-            //     data_modif
-            // );
-    
     
             const result =
                 applyOperation({
@@ -164,21 +170,19 @@ window.updateProgram = api;
                     update,
     
                     data_modif,
-
+    
                     selectedId,
-
+    
                     selectedField,
-                    
+    
                     selectedValue
     
                 });
-    
     
             debug(
                 "RESULT FROM applyOperation:",
                 result
             );
-    
     
             if(!result){
     
@@ -190,12 +194,10 @@ window.updateProgram = api;
     
             }
     
-    
             debug(
                 "RESULT keys:",
                 Object.keys(result)
             );
-    
     
             //--------------------------------------------------
             // DOWNLOAD
@@ -204,26 +206,40 @@ window.updateProgram = api;
             const downloaded =
                 window.jsonDownloader
                     ?.download({
-
+    
                         json:
                             result,
-
+    
                         fileName:
                             "document.json"
-
+    
                     });
     
+            const startupSource =
+                result?.meta
+                    ?.data
+                    ?.source;
+    
+            await window.navigateRenderer.navigate({
+    
+                html: "index.html",
+    
+                source:
+                    startupSource,
+    
+                parameters: {
+    
+                    profile:
+                        "runtime"
+    
+                }
+    
+            });
     
             debug(
                 "DOWNLOAD RESULT:",
                 downloaded
             );
-    
-    
-            debug(
-                "========== UPDATE PROGRAM / END =========="
-            );
-    
     
             return result;
     
@@ -231,7 +247,7 @@ window.updateProgram = api;
         catch(e){
     
             error(
-                "execute:",
+                "executeDirect:",
                 e
             );
     
@@ -240,7 +256,6 @@ window.updateProgram = api;
         }
     
     }
-
     
 // ==================================================
 // HAS DATA MODIF
@@ -709,7 +724,10 @@ function applyOperation({
 
     update = null,
 
-    data_modif = undefined
+    data_modif = undefined,
+    selectedId = null,
+    selectedField = null,
+    selectedValue = null
 
 } = {}){
 
@@ -794,6 +812,10 @@ function applyOperation({
             return result;
 
         }
+
+        debug("selectedId", selectedId);
+        debug("selectedField", selectedField);
+        debug("selectedValue", selectedValue);
 
         if(
 

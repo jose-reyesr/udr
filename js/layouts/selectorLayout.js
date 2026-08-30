@@ -87,6 +87,12 @@ async function render({
 
         }
 
+        showTerminalCommand({
+            
+            container
+            
+            });
+
         //------------------------------------------------
         // VIEW
         //------------------------------------------------
@@ -253,10 +259,6 @@ async function renderTable({
             "tr"
         );
 
-    // -----------------------------------------
-    // COLUMNA SELECCIÓN
-    // -----------------------------------------
-
     const thSelect =
         document.createElement(
             "th"
@@ -271,10 +273,6 @@ async function renderTable({
     tr.appendChild(
         thSelect
     );
-
-    // -----------------------------------------
-    // CAMPOS
-    // -----------------------------------------
 
     for(const field of visibleFields){
 
@@ -300,11 +298,8 @@ async function renderTable({
         }
 
         th.innerText =
-
             field.label ||
-
             field.campo ||
-
             "";
 
         tr.appendChild(
@@ -347,76 +342,98 @@ async function renderTable({
                 )
             );
 
-        // -----------------------------------------
-        // CHECKBOX DEL RENGLÓN
-        // -----------------------------------------
+        //------------------------------------------------
+        // CHECKBOX
+        //------------------------------------------------
 
         const tdSelect =
             document.createElement(
                 "td"
             );
 
-            const checkbox =
+        const checkbox =
             document.createElement(
                 "input"
             );
-        
+
         checkbox.type =
             "checkbox";
-        
-            checkbox.addEventListener(
 
-                "click",
-            
-                (event) => {
-            
-                    event.stopPropagation();
-            
-                }
-            
-            );
+        const selection =
+            initializeSelection({
+                context
+            });
 
-            checkbox.addEventListener(
-                "change",
-                () => {
+            // console.log(
+            //     "ITEM",
+            //     item
+            // );
             
-                    const selection =
-                        initializeSelection({
-                            context
-                        });
+            const id =
+                String(
+                    item?.value?.id ?? ""
+                );
             
-                    if(checkbox.checked){
+            // console.log(
+            //     "ID",
+            //     id
+            // );
             
+            // console.log(
+            //     "SELECTED",
+            //     selection.selected
+            // );
+
+        checkbox.checked =
+            selection.selected
+                .map(String)
+                .includes(id);
+
+        checkbox.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+            }
+        );
+
+        checkbox.addEventListener(
+            "change",
+            () => {
+
+                const selection =
+                    initializeSelection({
+                        context
+                    });
+
+                if(checkbox.checked){
+
+                    if(
+                        !selection.selected
+                            .map(String)
+                            .includes(id)
+                    ){
+
                         selection.selected.push(
-                            item
+                            id
                         );
-            
+
                     }
-                    else{
-            
-                        const index =
-                            selection.selected.indexOf(
-                                item
-                            );
-            
-                        if(index !== -1){
-            
-                            selection.selected.splice(
-                                index,
-                                1
-                            );
-            
-                        }
-            
-                    }
-            
-                    debug(
-                        "SELECCIÓN ACTUAL:",
-                        selection.selected
-                    );
-            
+
                 }
-            );
+                else{
+
+                    selection.selected =
+                        selection.selected.filter(
+                            value =>
+                                String(value) !== id
+                        );
+
+                }
+
+            }
+        );
 
         tdSelect.appendChild(
             checkbox
@@ -426,9 +443,9 @@ async function renderTable({
             tdSelect
         );
 
-        // -----------------------------------------
-        // CAMPOS DEL RENGLÓN
-        // -----------------------------------------
+        //------------------------------------------------
+        // CAMPOS
+        //------------------------------------------------
 
         for(const field of fieldsToRender){
 
@@ -459,12 +476,10 @@ async function renderTable({
                     field,
 
                     mode:
-
                         layoutConfig.mode ||
-
                         "display",
 
-                    context:{
+                    context: {
 
                         ...context,
 
@@ -757,11 +772,24 @@ function initializeSelection({
     context = {}
 } = {}){
 
+    // console.log(
+    //     "CONTEXT",
+    //     context
+    // );
+
+    // console.log(
+    //     "SELECTED VALUE",
+    //     context.selectedValue
+    // );
+
     if(!context.__selector){
 
         context.__selector = {
 
-            selected: []
+            selected:
+                JSON.parse(
+                    context.selectedValue || "[]"
+                )
 
         };
 
@@ -845,7 +873,9 @@ async function saveSelection({
             html: "index.html",
 
             source: {
-                file: "update.json"
+                file: "update.json",
+
+                path: "data"                
             },
 
             parameters: {
@@ -860,9 +890,7 @@ async function saveSelection({
                     context.selectedField,
 
                 selectedValue:
-                    JSON.stringify(
-                        selection.selected
-                    )
+                    selection.selected?.[0] ?? null
 
             }
 
@@ -891,6 +919,47 @@ function cancelSelection({
 
 }
 
+function showTerminalCommand({
+    container
+}){
+
+    const panel =
+        document.createElement("div");
+
+    panel.className =
+        "terminal-command";
+
+    panel.style.marginBottom =
+        "16px";
+
+    panel.style.padding =
+        "12px";
+
+    panel.style.background =
+        "#111";
+
+    panel.style.color =
+        "#0f0";
+
+    panel.style.fontFamily =
+        "monospace";
+
+    panel.innerHTML =
+`
+<div>
+Copiar update.json al proyecto:
+</div>
+
+<pre>
+./bin/actualizar.sh
+</pre>
+`;
+
+    container.appendChild(
+        panel
+    );
+
+}
 
     // ==================================================
     // REGISTRO GLOBAL

@@ -137,6 +137,14 @@
 
             link.click();
 
+            log(
+                "Descarga iniciada",
+                {
+                    fileName,
+                    size: content.length
+                }
+            );
+            
             link.remove();
 
             URL.revokeObjectURL(

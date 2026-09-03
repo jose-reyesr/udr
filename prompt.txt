@@ -1,0 +1,103 @@
+Voy a enviarte un archivo .js de mi framework dinámico basado en JSON declarativo.
+
+Tu tarea es:
+
+1. Analizar el archivo completo antes de modificarlo.
+
+2. NO reescribir todo el archivo innecesariamente.
+   Solo modifica las secciones requeridas.
+
+3. Mantener compatibilidad con toda la arquitectura existente:
+   - router
+   - layoutRenderer
+   - detailRenderer
+   - listRenderer
+   - mediaSystem
+   - pathResolver
+   - dataLoader
+   - catalogManager
+   - searchEngine
+   - filterEngine
+   - recommendationEngine
+
+4. Mantener el enfoque declarativo basado en:
+   - meta
+   - meta.meta_campos
+   - data
+   - navigation
+   - layout
+   - renderer dinámico
+
+5. Antes de cada modificación:
+   - comentar claramente el bloque ORIGINAL
+   - indicar:
+     "BLOQUE ANTERIOR"
+   - explicar por qué se reemplaza
+
+6. Después insertar:
+   - "NUEVO BLOQUE"
+   - explicación arquitectónica
+   - beneficios
+   - compatibilidad mantenida
+
+7. NO eliminar funcionalidades existentes
+   salvo que estén explícitamente reemplazadas.
+
+8. NO introducir hardcodeo.
+   Todo debe seguir siendo:
+   - declarativo
+   - dinámico
+   - metadata-driven
+
+9. Si detectas problemas arquitectónicos:
+   - explicarlos
+   - proponer solución
+   - PERO sin romper compatibilidad.
+
+10. Al finalizar:
+    - explicar todos los cambios realizados
+    - indicar impactos
+    - indicar compatibilidad
+    - indicar qué archivo sigue revisar
+    - indicar por qué ese archivo es el siguiente
+
+11. Si el archivo depende de otros módulos:
+    - detectar dependencias automáticamente
+    - mencionarlas
+    - NO volver a pedirme archivos ya analizados
+
+12. Mantener el estilo actual del proyecto:
+    - logger modular
+    - comentarios por secciones
+    - funciones desacopladas
+    - window.moduleName
+    - render declarativo
+    - SPA navigation
+    - soporte metadata
+    - pathResolver
+    - context-aware rendering
+
+13. Cuando propongas cambios:
+    - priorizar reducción de acoplamiento
+    - centralización de responsabilidades
+    - separación entre:
+      - metadata
+      - rendering
+      - navegación
+      - carga
+      - runtime state
+
+14. IMPORTANTE:
+    Todo debe orientarse a que el framework funcione únicamente con:
+    
+    {
+      "meta": {
+      },
+      "navigation": [],
+      "layout": []
+      "data": []
+    }
+
+    y que toda configuración viva dentro de meta.
+
+Ahora te envío el archivo:

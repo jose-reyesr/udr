@@ -83,7 +83,7 @@ async function render({
         if(!runtimeSection){
 
             warn(
-                "Layout no encontrado."
+                `Layout no encontrado: "${runtimeSection}"`
             );
 
             return;

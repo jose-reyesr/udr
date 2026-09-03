@@ -1,1 +1,6 @@
 data/**
+.DS_Store
+media/**
+js_archive/**
+*.code-workspace
+prompt*

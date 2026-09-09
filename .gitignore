@@ -1,4 +1,11 @@
+# Ignora todo el contenido de data
 data/**
+
+# Excepción: SÍ rastrear la carpeta de plantillas y sus archivos
+!data/templates/
+!data/templates/**
+
+# Mantener ignorado el resto
 .DS_Store
 media/**
 js_archive/**

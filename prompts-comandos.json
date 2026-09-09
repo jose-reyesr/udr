@@ -1,0 +1,170 @@
+{
+  "_comments": "Libreta de prompts y shells para no olvidar PARA QUÉ es cada uno y CÓMO se ejecuta. tipo=prompt|shell. alcance=general|proyecto. Si alcance=proyecto, proyecto_id es obligatorio. El cuerpo no se improvisa al usar: se copia y se rellenan los {placeholders}.",
+  "catalogo": "prompts_comandos",
+  "version": "1.0",
+  "fecha": "2026-09-07",
+  "como_usar": [
+    "Buscar por tags o por proyecto_id.",
+    "Leer para_que y cuando_usarlo ANTES de pegar el cuerpo.",
+    "Seguir como_ejecutar en orden. No saltarse prerequisitos.",
+    "Si hay placeholders {asi}, sustituirlos; no dejarlos literales."
+  ],
+  "proyectos": [
+    {
+      "id": "imperio",
+      "nombre": "Imperio / Norma",
+      "carpeta": "/home/workdir/artifacts"
+    },
+    {
+      "id": "general",
+      "nombre": "Uso en cualquier chat",
+      "carpeta": null
+    }
+  ],
+  "items": [
+    {
+      "id": "cmd-switch-modo-grok-001",
+      "tipo": "prompt",
+      "alcance": "general",
+      "proyecto_id": null,
+      "titulo": "Salir a modo Grok base",
+      "para_que": "Dejar de responder como personaje (Norma u otro) y volver al asistente técnico.",
+      "cuando_usarlo": "Cuando se va a hablar de JSON, catálogos, arquitectura o archivos.",
+      "prerequisitos": [],
+      "como_ejecutar": [
+        "Escribir exactamente: switch modo grok",
+        "Esperar confirmación 'Modo Grok base activado'",
+        "Ahí sí pedir el trabajo técnico"
+      ],
+      "cuerpo": "switch modo grok",
+      "placeholders": [],
+      "entrada": "ninguna",
+      "salida": "Confirmación de modo + respuesta como Grok",
+      "archivos": [],
+      "tags": ["switch", "modo", "grok"]
+    },
+    {
+      "id": "cmd-switch-modo-persona-002",
+      "tipo": "prompt",
+      "alcance": "proyecto",
+      "proyecto_id": "imperio",
+      "titulo": "Activar modo de un personaje",
+      "para_que": "Responder como la card de esa persona (WhatsApp si no es escena; narrativo si es escena caliente).",
+      "cuando_usarlo": "Roleplay. El nombre tiene que existir en Character-Cards.json / cards.",
+      "prerequisitos": [
+        "La persona tiene card",
+        "No pedir arquitectura en el mismo mensaje"
+      ],
+      "como_ejecutar": [
+        "Escribir: switch modo {nombre}",
+        "Esperar 'Modo duro/híbrido activado'",
+        "Hablarle al personaje"
+      ],
+      "cuerpo": "switch modo {nombre}",
+      "placeholders": [
+        { "clave": "nombre", "ejemplo": "norma", "obligatorio": true }
+      ],
+      "entrada": "nombre de card",
+      "salida": "Respuesta en personaje",
+      "archivos": [
+        "Character-Cards.json",
+        "normav2.json",
+        "Norma-prompt-v10.23-lite.txt"
+      ],
+      "tags": ["switch", "modo", "personaje", "imperio"]
+    },
+    {
+      "id": "cmd-generar-escena-json-003",
+      "tipo": "prompt",
+      "alcance": "proyecto",
+      "proyecto_id": "imperio",
+      "titulo": "Generar escena en base al JSON hidratado",
+      "para_que": "Escribir la escena caliente usando SOLO el JSON ya armado (cards + reglas + ropa + posiciones). Lo null se inventa al generar, no antes.",
+      "cuando_usarlo": "Cuando el JSON de escena ya está adecuado (estado listo_para_generar). No pedirlo si todavía es borrador.",
+      "prerequisitos": [
+        "Existe el archivo de escena (plantilla hidratada o escena-*-prueba.json)",
+        "participantes y ropa_propuesta_esta_escena llenos",
+        "switch modo grok o el compilador en Grok; el texto sale narrativo, no WhatsApp"
+      ],
+      "como_ejecutar": [
+        "Abrir el JSON de la escena",
+        "Revisar participantes, parentesco_a_la_vista, intensidad_esta_escena, posiciones",
+        "Pegar el prompt y adjuntar o citar el archivo",
+        "No cambiar la card; si algo está mal, se adecúa el JSON y se vuelve a pedir"
+      ],
+      "cuerpo": "Genera la escena en base al siguiente JSON. No inventes campos que ya estén llenos. Lo que esté en null sí se puede completar al escribir. Sigue Reglas-Escenas v10.23 y la intensidad_esta_escena del propio JSON.\n\nArchivo: {ruta_json}",
+      "placeholders": [
+        { "clave": "ruta_json", "ejemplo": "escena-mary-luis-prueba.json", "obligatorio": true }
+      ],
+      "entrada": "JSON de escena autónomo",
+      "salida": "Escena escrita + renders + scenes-log de ESA pieza",
+      "archivos": [
+        "plantilla-escena.json",
+        "Reglas-Escenas.json",
+        "render-personas.json"
+      ],
+      "tags": ["escena", "generar", "imperio", "json"]
+    },
+    {
+      "id": "cmd-hidratar-plantilla-004",
+      "tipo": "prompt",
+      "alcance": "proyecto",
+      "proyecto_id": "imperio",
+      "titulo": "Hidratar plantilla-escena desde cards",
+      "para_que": "Armar el JSON de escena tomando de cada card solo lo que aplica (físico, ropa por nivel, con_esta_pareja, apodos). No escribir la escena todavía.",
+      "cuando_usarlo": "Antes de generar. Cuando ya se sabe persona1 + personas[] + lugar + disparo.",
+      "prerequisitos": [
+        "Cards de las personas (si falta card, el hueco se marca _sin_card=true)",
+        "arbol.json para parentesco_a_la_vista"
+      ],
+      "como_ejecutar": [
+        "Decir quién entra: persona1={persona1}, personas=[{personas}]",
+        "Decir lugar, si José pide la escena, intensidad (baja|media|max)",
+        "Pedir: hidrata plantilla-escena.json, no escribas la escena",
+        "Revisar el JSON, adecuar ropa_propuesta y disparo",
+        "Hasta después: cmd-generar-escena-json-003"
+      ],
+      "cuerpo": "Hidrata plantilla-escena.json para esta pieza. No escribas la escena.\n\npersona1: {persona1}\npersonas: {personas}\nlugar: {lugar}\njose_pide: {jose_pide}\nintensidad: {intensidad}\ndisparo: {disparo}",
+      "placeholders": [
+        { "clave": "persona1", "ejemplo": "mary", "obligatorio": true },
+        { "clave": "personas", "ejemplo": "[\"luis\"]", "obligatorio": true },
+        { "clave": "lugar", "ejemplo": "recámara de Mary", "obligatorio": true },
+        { "clave": "jose_pide", "ejemplo": "false", "obligatorio": true },
+        { "clave": "intensidad", "ejemplo": "media", "obligatorio": true },
+        { "clave": "disparo", "ejemplo": "Luis llega por el desarmador. Mary cierra.", "obligatorio": false }
+      ],
+      "entrada": "nombres + cuadro",
+      "salida": "JSON de escena hidratado (archivo nuevo o plantilla llena)",
+      "archivos": [
+        "plantilla-escena.json",
+        "normav2.json",
+        "render-personas.json",
+        "arbol.json"
+      ],
+      "tags": ["hidratar", "plantilla", "escena", "imperio"]
+    },
+    {
+      "id": "sh-validar-json-005",
+      "tipo": "shell",
+      "alcance": "general",
+      "proyecto_id": null,
+      "titulo": "Validar que un JSON abre",
+      "para_que": "Cazar JSON roto (coma de más, extra data) antes de hidratar o generar.",
+      "cuando_usarlo": "Después de editar a mano cualquier .json.",
+      "prerequisitos": ["El archivo existe"],
+      "como_ejecutar": [
+        "Sustituir {ruta} por el archivo",
+        "Correr el comando en la carpeta del proyecto",
+        "Si imprime ok + keys, está bien. Si truena, no generar encima"
+      ],
+      "cuerpo": "python3 -c \"import json,sys; d=json.load(open(sys.argv[1])); print('ok', type(d).__name__, list(d)[:12] if isinstance(d,dict) else len(d))\" {ruta}",
+      "placeholders": [
+        { "clave": "ruta", "ejemplo": "plantilla-escena.json", "obligatorio": true }
+      ],
+      "entrada": "ruta a un .json",
+      "salida": "ok + claves de raíz, o traceback",
+      "archivos": [],
+      "tags": ["shell", "validar", "json"]
+    }
+  ]
+}

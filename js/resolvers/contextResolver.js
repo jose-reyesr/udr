@@ -2,6 +2,30 @@ async function execute({
 
     persona1 = null,
     intencion = "",
+<<<<<<< HEAD
+    persona2 = null
+
+} = {}){
+
+    try{
+
+        if(!persona1){
+            throw new Error(
+                "persona1 es requerida."
+            );
+        }
+
+        if(!intencion){
+            throw new Error(
+                "intencion es requerida."
+            );
+        }
+
+        if(!persona2){
+            throw new Error(
+                "persona2 es requerida."
+            );
+=======
     persona2 = [],
     field = null,
     selectedId = null,
@@ -34,6 +58,7 @@ async function execute({
                 "persona2 debe ser una lista."
             );
 
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
         }
 
         const motorConfig =
@@ -47,7 +72,11 @@ async function execute({
         const estructuraBase =
             motorConfig.estructura_salida_base;
 
+<<<<<<< HEAD
+        if(!estructuraBase){
+=======
         if (!estructuraBase) {
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
 
             throw new Error(
                 "No existe 'estructura_salida_base' en motor_config."
@@ -64,15 +93,24 @@ async function execute({
 
         const contexto =
             resolveIntent({
+<<<<<<< HEAD
+=======
 
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
                 mapaIntenciones,
                 intencion,
                 campoContexto:
                     rutas.campo_contexto
+<<<<<<< HEAD
+            });
+
+        if(!contexto){
+=======
 
             });
 
         if (!contexto) {
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
 
             debug(
                 "Intención no encontrada:",
@@ -80,6 +118,13 @@ async function execute({
             );
 
             return null;
+<<<<<<< HEAD
+        }
+
+        const datosEmisor =
+            extractNodes({
+                root: persona1,
+=======
 
         }
 
@@ -92,12 +137,29 @@ async function execute({
 
                 root: persona1,
 
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
                 paths:
                     window.pathResolver.getByPath(
                         contexto,
                         rutas.campo_emisor,
                         []
                     )
+<<<<<<< HEAD
+            });
+
+        const datosReceptor =
+            extractNodes({
+                root: persona2,
+                paths:
+                    window.pathResolver.getByPath(
+                        contexto,
+                        rutas.campo_receptor,
+                        []
+                    )
+            });
+
+        return buildOutput({
+=======
 
             });
 
@@ -203,10 +265,20 @@ async function execute({
 
         return buildOutput({
 
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
             estructuraBase,
             contexto,
             intencion,
             persona1,
+<<<<<<< HEAD
+            persona2,
+            datosEmisor,
+            datosReceptor
+        });
+
+    }
+    catch(e){
+=======
             persona2:
                 personasReceptor,
             datosEmisor,
@@ -216,6 +288,7 @@ async function execute({
 
     }
     catch (e) {
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
 
         error(
             "execute:",
@@ -228,6 +301,21 @@ async function execute({
 
 }
 
+<<<<<<< HEAD
+function resolveIntent({
+
+    mapaIntenciones = [],
+    intencion = "",
+    campoContexto = ""
+
+} = {}){
+
+    if(!Array.isArray(mapaIntenciones)){
+        return null;
+    }
+
+    if(!campoContexto){
+=======
 
 function resolveIntent({
     mapaIntenciones = [],
@@ -240,6 +328,7 @@ function resolveIntent({
     }
 
     if (!campoContexto) {
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
         return null;
     }
 
@@ -255,6 +344,21 @@ function resolveIntent({
 }
 
 function extractNodes({
+<<<<<<< HEAD
+
+    root = {},
+    paths = []
+
+} = {}){
+
+    const resultado = {};
+
+    if(!Array.isArray(paths)){
+        return resultado;
+    }
+
+    for(const path of paths){
+=======
     root = {},
     paths = []
 } = {}) {
@@ -266,6 +370,7 @@ function extractNodes({
     }
 
     for (const path of paths) {
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
 
         const value =
             window.pathResolver.getByPath(
@@ -274,7 +379,11 @@ function extractNodes({
                 undefined
             );
 
+<<<<<<< HEAD
+        if(value === undefined){
+=======
         if (value === undefined) {
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
             continue;
         }
 
@@ -296,6 +405,16 @@ function buildOutput({
     contexto,
     intencion,
     persona1,
+<<<<<<< HEAD
+    persona2,
+    datosEmisor,
+    datosReceptor
+
+} = {}){
+
+    const resultado =
+        structuredClone(
+=======
     persona2 = [],
     datosEmisor,
     datosReceptor = []
@@ -304,6 +423,7 @@ function buildOutput({
 
     const resultado =
         clone(
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
             estructuraBase
         );
 
@@ -312,12 +432,35 @@ function buildOutput({
         persona1?.id ||
         "";
 
+<<<<<<< HEAD
+    const nombreReceptor =
+        persona2?.nombre ||
+        persona2?.id ||
+        "";
+
+=======
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
     window.pathResolver.setByPath(
         resultado,
         "contexto_sistema.intencion_detectada",
         intencion
     );
 
+<<<<<<< HEAD
+    window.pathResolver.setByPath(
+        resultado,
+        "datos_encontrados.entidades_cruzadas",
+        {
+            [nombreEmisor]: datosEmisor,
+            [nombreReceptor]: datosReceptor
+        }
+    );
+
+    window.pathResolver.setByPath(
+        resultado,
+        "instruccion_usuario",
+        `${nombreEmisor} ${intencion} ${nombreReceptor}`
+=======
     //--------------------------------------------------
     // ENTIDADES CRUZADAS
     //--------------------------------------------------
@@ -384,6 +527,7 @@ function buildOutput({
             intencion,
             ...nombresReceptores
         ].join(" ")
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
     );
 
     log(
@@ -391,6 +535,8 @@ function buildOutput({
         resultado
     );
 
+<<<<<<< HEAD
+=======
     //--------------------------------------------------
     // DESCARGA
     //--------------------------------------------------
@@ -418,10 +564,13 @@ function buildOutput({
 
     }
 
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee
     return resultado;
 
 }
 
+<<<<<<< HEAD
+=======
 function clone(value) {
 
     if (
@@ -438,3 +587,4 @@ function clone(value) {
     );
 
 }
+>>>>>>> f1df6f9748708a0da2576323590b20fb6ff833ee

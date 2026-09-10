@@ -1,3 +1,6 @@
+# Ignora todo el contenido de Grok
+Grok/**
+
 # Ignora todo el contenido de data
 data/**
 !data/norma_completo.json

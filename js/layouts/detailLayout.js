@@ -155,17 +155,6 @@
 card.className =
     "detail-card";
 
-// debug(
-//     "renderItem index:",
-//     index
-// );
-
-if(index > 0){
-
-    card.style.borderTop = "8px solid red";
-
-}
-
 container.appendChild(
     card
 );
@@ -189,11 +178,12 @@ container.appendChild(
             "detail-title";
 
             title.style.display = "block";
-            title.style.background = "yellow";
-            title.style.color = "red";
+            title.style.background = "#2d2613";
+            title.style.color = "#f59e0b";
             title.style.fontSize = "18px";
             title.style.fontWeight = "bold";
-            title.style.padding = "5px";            
+            title.style.padding = "6px 10px";
+            title.style.borderRadius = "4px";    
 
         title.innerText =
 
@@ -594,52 +584,6 @@ function expandResolved(resolved){
     return result;
 
 }
-
-// function flattenFields(
-//     fields = []
-// ){
-
-//     const result = [];
-
-//     for(const field of fields){
-
-//         result.push(field);
-
-//         if(
-//             Array.isArray(field.fields) &&
-//             field.fields.length
-//         ){
-
-//             result.push(
-//                 ...flattenFields(
-//                     field.fields
-//                 )
-//             );
-
-//         }
-
-//         if(
-//             Array.isArray(field.items) &&
-//             field.items.length
-//         ){
-
-//             for(const item of field.items){
-
-//                 result.push(
-//                     ...flattenFields(
-//                         item.fields || []
-//                     )
-//                 );
-
-//             }
-
-//         }
-
-//     }
-
-//     return result;
-
-// }
 
 function flattenFields(
     fields = [],

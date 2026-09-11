@@ -1,0 +1,466 @@
+{
+  "_comments": "Plantilla maestra de escena(s) del Imperio. Flujo: 1) pedimos la escena 2) se entrega este JSON ya hidratado con cards + reglas 3) se adecúa 4) se dice 'genera la escena en base al siguiente JSON'. Lo que quede en null se inventa SOLO al generar. Una llegada = otra escena DENTRO de este mismo archivo, DESPUÉS del aftercare de la anterior. No se redescribe a quien ya estaba.",
+  "metadatos": {
+    "_comments": "Identidad del archivo, no del acto. version/fecha para no perder iteraciones. autonomo=true significa que este JSON ya trae card + reglas aplicadas y se puede escribir sin volver a leer el árbol.",
+    "version": "1.0",
+    "creado": "2026-09-06T15:45:00-06:00",
+    "autonomo": true,
+    "estado": "borrador_para_adecuar",
+    "fuentes_ya_aplicadas": [
+      "normav2.X98_character_card_completa",
+      "arbol.json",
+      "Reglas-Escenas.json v10.23",
+      "render-personas.json"
+    ]
+  },
+
+  "paquete": {
+    "_comments": "Envuelve UNA o VARIAS escenas de la misma noche/lugar. Si solo hay una escena, escenas[] tiene un elemento y rol=principal. Si llegan personas después, se agrega otra escena con rol=continua_llegada, empieza_despues_de=N y despues_de=aftercare.",
+    "id": null,
+    "fecha": "2026-09-06",
+    "tipo": "cadena_misma_noche",
+    "lugar": "casa",
+    "clasificacion": "personal-imperio",
+    "pedido": "Norma masturbándose (plantilla completa; las demás secciones van vacías de ejemplo)"
+  },
+
+  "reglas_congeladas": {
+    "_comments": "Copia reducida de Reglas-Escenas v10.23 que YA se aplicó. No se vuelve a consultar el archivo al generar. posiciones_max es POR ESCENA, no por paquete. pairings: hetero | fmf | mmf | swap_2x2 | masturbacion | grupo. No hay sexo entre hombres. Aftercare de Don José = false (puro sexo). Incesto/culpa extrema solo sangre de José.",
+    "orden_inicio": ["fisico+ropa+renders", "previo", "posicion_1"],
+    "renders_mujeres": "frente|espalda x2 (o tira de 4 si se pide)",
+    "posiciones_max": 5,
+    "posiciones_ideal": "4-5",
+    "sensaciones_todos": true,
+    "pairings_permitidos": ["hetero", "fmf", "mmf", "swap_2x2", "masturbacion", "grupo"],
+    "hombres_entre_hombres": false,
+    "aftercare_don_jose": false,
+    "frases_sorpresa_min": ["incesto_si_parentesco_a_la_vista", "reparto", "verga_si_entra_jose", "situacion"],
+    "cierre_obligatorio": ["resumen_secuencial", "whatsapp_activo", "scenes_log_ultima"]
+  },
+
+  "escenas": [
+    {
+      "_comments": "Escena 1 = principal. Lleva previo de 4-6 párrafos y bloques de TODAS las mujeres que empiezan aquí. Las escenas 2+ solo bloquean a los que LLEGAN.",
+      "orden": 1,
+      "rol": "principal",
+      "id": null,
+      "titulo": null,
+      "participantes": ["norma"],
+
+      "intercambio": {
+        "_comments": "Solo si hay intercambio de esposas. parejas_origen = con quién llegaron. parejas_swap = con quién se arma el acto. simultaneo=true = dos ejes a la vez. Si no aplica, dejar null. NO borrar la clave.",
+        "aplica": false,
+        "tipo": "esposas",
+        "parejas_origen": [],
+        "parejas_swap": [],
+        "simultaneo": true,
+        "los_hombres_se_tocan": false
+      },
+
+      "cuadro": {
+        "_comments": "Dónde y cuándo pasa ESTA escena. quienes_en_casa no son testigos del acto; testigos sí ven. puerta cerrada/entreabierta/se_abre. niños: ya dormidos | no hay | en otra casa.",
+        "lugar": "casa",
+        "hora": null,
+        "espacio": "recamara",
+        "quienes_en_casa": ["norma"],
+        "niños": null,
+        "testigos": [],
+        "puerta": "cerrada"
+      },
+
+      "inicio": {
+        "_comments": "Orden congelado: primero bloques de persona (físico + exterior + render + interior + render), luego previo, luego posición 1. En escena principal el previo es 4-6 párrafos. En continua_llegada el previo es 2-3 y tipo=llegada.",
+        "orden_congelado": ["bloques_persona", "previo", "posicion_1"],
+        "bloques_persona": {
+          "_comments": "solo = a quién se le hace el bloque en ESTA escena. En la principal son todos los que empiezan. En una llegada, SOLO los nuevos. por_mujer es el orden de texto/render. hombre_visible_excitado para Luis/José/Juan/etc.",
+          "solo": ["norma"],
+          "orden_personas": ["norma"],
+          "por_mujer": [
+            "texto_fisico",
+            "texto_exterior",
+            "render_exterior_frente_espalda",
+            "texto_interior",
+            "render_interior_frente_espalda"
+          ],
+          "hombre_visible_excitado": false
+        },
+        "previo": {
+          "_comments": "Explica cómo se llegó al acto. No es el acto. momento_sexual es el disparo visual/diálogo que cierra el previo (mano bajo el short, 'ya no aguanto', etc.). Si va null, se inventa al generar.",
+          "tipo": "principal",
+          "parrafos_min": 4,
+          "parrafos_max": 6,
+          "como_se_dio": {
+            "pretexto": null,
+            "quien_inicia": "norma",
+            "quien_lleva": "norma"
+          },
+          "tension": {
+            "norma": "gana + pena; Luis no la deja satisfecha"
+          },
+          "por_que_sigue": {
+            "norma": "está sola y no se resiste a la gana"
+          },
+          "momento_sexual": {
+            "accion": "se_toca",
+            "dialogo": null
+          },
+          "dialogo_inicial": []
+        },
+        "ven": {
+          "_comments": "Solo en rol=continua_llegada. Qué ven los que acaban de entrar. Se llena con estado_al_salir de la escena anterior. En la principal se deja null.",
+          "aplica": false,
+          "donde": null,
+          "estado": null,
+          "ropa": null,
+          "dialogo_puerta": null
+        }
+      },
+
+      "personas": {
+        "_comments": "Fichas YA hidratadas de esta escena. fisico + ropa que le gusta (catálogo personal) + ropa_propuesta_esta_escena (lo que trae HOY). con_esta_pareja solo si hay coito. INCOMPLETO lista lo que falta de alguien sin card.",
+        "norma": {
+          "nombre": "Norma",
+          "fecha_nacimiento": "1991-03-15",
+          "edad_en_fecha": 35,
+          "altura": "1.65 m",
+          "peso": "68 kg",
+          "nacionalidad": "Mexicana",
+          "piel": "canela clara, pecas suaves en hombros y parte alta de la espalda",
+          "pelo": "negro azabache, largo hasta la mitad de la espalda, liso y brillante",
+          "cara": "rostro ovalado, pómulos suaves, nariz pequeña y respingada, cejas naturales",
+          "ojos": "grandes, café oscuro casi negro, pestañas densas",
+          "boca": "labios carnosos rosa natural",
+          "cuerpo": "curvy suave post-parto, cintura marcada, cadera ancha, rollitos suaves",
+          "chichis": "A-B naturales con caída media post-lactancia, forma de lágrima, pezones cafés claros muy sensibles",
+          "panocha": "labios mayores carnosos, vello negro recortado en triángulo, se moja fácil",
+          "culo": "redondo mediano-carnoso, parado suave",
+          "piernas": "firmes, muslo suave post-parto",
+          "lentes": false,
+          "tatuajes": false,
+          "ropa_que_le_gusta": {
+            "_comments": "Preferencias de ficha / catálogo personal. No es la ropa de HOY. tipo+color+tela viven aquí como listas; la escena elige ids o un look clavado.",
+            "exterior": [
+              {
+                "tipo_ropa": "blusa",
+                "modelos": ["blusita de tirantes", "blusa floreada corta", "top ajustado"],
+                "colores": ["blanca", "rosa", "negro"],
+                "telas": ["algodón suave", "licra elástica"]
+              },
+              {
+                "tipo_ropa": "short",
+                "modelos": ["mezclilla corto", "deportivo", "algodón flojito"],
+                "colores": ["azul denim", "negro", "rosa pastel"],
+                "telas": ["mezclilla", "algodón"]
+              },
+              {
+                "tipo_ropa": "look_casa_monterrey",
+                "top": "playera gris corta que deja el ombligo",
+                "abajo": "short bajito en la cadera"
+              }
+            ],
+            "interior": [
+              {
+                "tipo_ropa": "brasier",
+                "modelos": ["push-up", "balconette", "con varillas", "encaje floral"],
+                "colores": ["blanco puro", "rosa pastel", "negro discreto", "beige nude"],
+                "telas": ["algodón suave", "encaje", "microfibra"]
+              },
+              {
+                "tipo_ropa": "calzon",
+                "modelos": ["tanga tira delgada", "cachetero alto", "brasilera con encaje"],
+                "colores": ["blanco puro", "rosa pastel", "negro discreto", "beige nude"],
+                "telas": ["algodón suave", "encaje", "microfibra"]
+              }
+            ]
+          },
+          "ropa_propuesta_esta_escena": {
+            "_comments": "Lo que trae puesto al inicio de ESTA escena. Se describe y se renderiza. Variar color/modelo entre escenas salvo look clavado.",
+            "exterior": { "top": "playera gris corta", "abajo": "short bajito" },
+            "interior": { "brasier": "negro", "calzon": "tanga blanca", "medias": "sin" }
+          },
+          "con_esta_pareja": {
+            "_comments": "Excepción sexual contra la persona del acto. En masturbación sola se deja aplica=false.",
+            "aplica": false,
+            "persona": null,
+            "queda_satisfecha": null,
+            "aguante": null,
+            "aftercare": null
+          },
+          "dijo_que_no": false
+        }
+      },
+
+      "acto": {
+        "_comments": "El sexo. oral/vaginal/anal son banderas de lo que SÍ ocurre en esta escena. posiciones[] máximo 5. Cada posición declara formato + quién hace qué. Si hay dos o más ejes a la vez (swap, grupo, DP + oral), se usa ejes[].",
+        "oral": false,
+        "vaginal": false,
+        "anal": false,
+        "formato_dominante": "masturbacion",
+        "posiciones_que_le_gustan": {
+          "_comments": "Catálogo personal de la protagonista para ESTE formato. Se copia de la card. Las posiciones[] de abajo eligen de esta lista o se desvían a propósito.",
+          "formato": "masturbacion",
+          "lista": [
+            { "posicion_id": "espejo_sentada", "nombre": "Sentada frente al espejo", "detalle": "piernas abiertas, dedos en la rajita y pellizcando pezones" },
+            { "posicion_id": "boca_arriba", "nombre": "Acostada boca arriba", "detalle": "piernas en V, dos dedos + pulgar en clítoris" },
+            { "posicion_id": "cuatro_patas", "nombre": "A cuatro patas", "detalle": "culo en alto, dedos desde atrás" },
+            { "posicion_id": "de_lado_almohada", "nombre": "De lado con almohada", "detalle": "frotando el clítoris contra la tela" }
+          ]
+        },
+        "posiciones": [
+          {
+            "_comments": "Un beat. orden empieza en 1 por escena. formato: hetero | fmf | mmf | swap_2x2 | masturbacion | grupo. activos = quien ejecuta. receptoras = quien recibe. apoyo = toca pero no es el eje. testigos = miran. con_que y motivo solo en masturbación. ejes[] solo si hay más de un cruce a la vez.",
+            "orden": 1,
+            "posicion_id": "espejo_sentada",
+            "nombre": "Sentada frente al espejo",
+            "tipo": "mujer_domina",
+            "formato": "masturbacion",
+            "activos": ["norma"],
+            "receptoras": ["norma"],
+            "apoyo": [],
+            "testigos": [],
+            "roles": [
+              { "quien": "norma", "hace": "se_toca", "con": "ella", "donde": "panocha_y_pezones" }
+            ],
+            "ejes": [],
+            "con_que": "mano",
+            "motivo": "sola",
+            "orgasmos": [],
+            "corridas": []
+          },
+          {
+            "orden": 2,
+            "posicion_id": "boca_arriba",
+            "nombre": "Acostada boca arriba",
+            "tipo": "mujer_domina",
+            "formato": "masturbacion",
+            "activos": ["norma"],
+            "receptoras": ["norma"],
+            "roles": [{ "quien": "norma", "hace": "se_toca", "con": "ella" }],
+            "con_que": "mano",
+            "orgasmos": [],
+            "corridas": []
+          },
+          {
+            "orden": 3,
+            "posicion_id": "cuatro_patas",
+            "nombre": "A cuatro patas",
+            "tipo": "mujer_domina",
+            "formato": "masturbacion",
+            "activos": ["norma"],
+            "receptoras": ["norma"],
+            "roles": [{ "quien": "norma", "hace": "se_toca", "con": "ella", "donde": "desde_atras" }],
+            "con_que": "mano",
+            "orgasmos": [],
+            "corridas": []
+          },
+          {
+            "orden": 4,
+            "posicion_id": "de_lado_almohada",
+            "nombre": "De lado con almohada",
+            "tipo": "mujer_domina",
+            "formato": "masturbacion",
+            "activos": ["norma"],
+            "receptoras": ["norma"],
+            "roles": [{ "quien": "norma", "hace": "se_frota", "con": "almohada" }],
+            "con_que": "almohada",
+            "orgasmos": [{ "quien": "norma", "n": 1, "como": "sola" }],
+            "corridas": []
+          }
+        ],
+        "ejemplos_formato_no_usados_en_esta_escena": {
+          "_comments": "NO se ejecutan. Quedan de referencia para copiar cuando la escena SÍ sea trío, swap, grupo o insatisfacción. Borrar en una escena real si estorban.",
+          "fmf": {
+            "formato": "fmf",
+            "activos": ["mary"],
+            "receptoras": ["norma"],
+            "apoyo": [{ "quien": "don_jose", "accion": "mira_o_entra" }]
+          },
+          "mmf": {
+            "formato": "mmf",
+            "tipo": "doble_penetracion",
+            "activos": ["howard", "raj"],
+            "receptoras": ["penny"],
+            "roles": [
+              { "quien": "howard", "hace": "penetra_vaginal", "con": "penny" },
+              { "quien": "raj", "hace": "penetra_anal", "con": "penny" }
+            ]
+          },
+          "swap_2x2": {
+            "formato": "swap_2x2",
+            "ejes": [
+              { "posicion_id": "misionero", "activos": ["don_jose"], "receptoras": ["malena"] },
+              { "posicion_id": "vaquera", "activos": ["mary"], "receptoras": ["juan"] }
+            ]
+          },
+          "grupo_dos_ejes_mas_boca": {
+            "formato": "grupo",
+            "ejes": [
+              { "eje": "a", "formato": "fmf", "activos": ["penny"], "receptoras": ["bernadette"], "roles": [{ "quien": "penny", "hace": "lame_semen", "donde": ["panocha", "culo"], "pose": "encima" }] },
+              { "eje": "b", "formato": "hetero", "activos": ["leonard"], "receptoras": ["bernadette"], "roles": [{ "quien": "leonard", "hace": "penetra_boca", "con": "bernadette" }] },
+              { "eje": "c", "formato": "mmf", "tipo": "doble_penetracion", "activos": ["howard", "raj"], "receptoras": ["penny"] }
+            ]
+          }
+        }
+      },
+
+      "cierre": {
+        "_comments": "Cierra ESTA escena antes de que pueda empezar la siguiente. aftercare de José = false. aftercare sola = agua, cubrirse, pena. quedo_satisfecha por persona. Si alguien queda en false y no hay beat de masturbación, al generar se agrega. cierra_con.orden_ref apunta a un orden ya existente para no narrar dos finales.",
+        "aftercare": {
+          "tipo": "sola",
+          "de_ficha": "prolongado cariñoso cuando hay pareja; aquí no hay pareja",
+          "acciones_propuestas": [
+            "agua",
+            "se queda temblando en la cama",
+            "se cubre",
+            "pena residual si pensó en Don José / culpa con Luis"
+          ]
+        },
+        "limpieza": null,
+        "quedo_satisfecha": { "norma": true },
+        "cierra_con": {
+          "quien": "norma",
+          "formato": "masturbacion",
+          "con_que": "almohada",
+          "mientras": "sola",
+          "orden_ref": 4
+        },
+        "fantasia_mientras_se_toca": {
+          "persona": "don_jose",
+          "usar": null
+        },
+        "quien_se_queda": ["norma"],
+        "quien_se_entera": null
+      },
+
+      "estado_al_salir": {
+        "_comments": "Única cosa que hereda la escena siguiente. ropa, semen, quién sigue despierto, puerta. Si no hay escena 2, igual se llena por si luego se agrega.",
+        "donde": "recamara",
+        "ropa": "interior_o_desnuda",
+        "cuerpos": "ya_se_vino_sola",
+        "semen_escurrriendo": [],
+        "puerta": "cerrada",
+        "despiertos": ["norma"]
+      },
+
+      "output": {
+        "_comments": "Qué se entrega al decir genera. renders en el bloque de inicio. resumen secuencial con títulos de posición/orgasmo/corrida (quién sentía qué). scenes_log solo de ESTA escena. whatsapp del personaje activo al final.",
+        "renders": true,
+        "formato_render": "frente_espalda",
+        "resumen": true,
+        "scenes_log": true,
+        "whatsapp_cierre": true
+      },
+
+      "preview_resumen_texto": {
+        "_comments": "Cómo se va a leer el resumen. Los orgasmos/corridas vacíos se llenan al generar. Títulos con nombre de posición + quién + qué sentía, no 'Orgasmo 3 – Norma' pelón.",
+        "lineas": [
+          "**Escena [titulo] – Norma**",
+          "**Fecha:** 2026-09-06 · recámara · sola",
+          "**Posición 1: Espejo sentada – Norma se toca**",
+          "**Posición 2: Boca arriba – dedos**",
+          "**Posición 3: Cuatro patas – dedos desde atrás**",
+          "**Posición 4: Almohada de lado – se viene**",
+          "**Aftercare:** sola, agua, se cubre, pena residual"
+        ]
+      },
+
+      "preview_scenes_log": {
+        "_comments": "Objeto JSON de la ÚLTIMA escena escrita de este paquete (o de esta escena si se pide log por escena). id se asigna al generar.",
+        "id": null,
+        "fecha": "2026-09-06",
+        "clasificacion": "personal-imperio",
+        "participantes": ["Norma"],
+        "titulo": null,
+        "resumen": null,
+        "ropa_interior_inicial": {
+          "Norma": "brasier negro + tanga blanca"
+        },
+        "climax_por_posicion": [
+          { "posicion": 1, "nombre": "Espejo sentada", "orgasmos": [], "corridas": [] },
+          { "posicion": 2, "nombre": "Boca arriba", "orgasmos": [], "corridas": [] },
+          { "posicion": 3, "nombre": "Cuatro patas", "orgasmos": [], "corridas": [] },
+          { "posicion": 4, "nombre": "Almohada de lado", "orgasmos": ["Norma se viene sola"], "corridas": [] }
+        ],
+        "detalles_extra": "Masturbación sola. Fantasía de Don José opcional.",
+        "tags": ["masturbacion", "norma", "casa", "sola"]
+      }
+    },
+
+    {
+      "_comments": "PLANTILLA de escena 2. No se usa en el pedido actual (Norma sola). Se deja para copiar cuando alguien LLEGUE después del aftercare. Empieza_despues_de=1, despues_de=aftercare. bloques_persona.solo = los que llegan. siguen = los que ya estaban. heredan estado_al_salir de la anterior. previo 2-3 párrafos tipo llegada.",
+      "orden": 2,
+      "rol": "continua_llegada",
+      "id": null,
+      "titulo": null,
+      "empieza_despues_de": 1,
+      "despues_de": "aftercare",
+      "aplica_en_este_pedido": false,
+      "llegan": [],
+      "siguen": ["norma"],
+      "salen": [],
+      "participantes": [],
+      "heredan_de": 1,
+      "cuadro": {
+        "_comments": "Mismo lugar salvo que se cambie. puerta se_abre.",
+        "lugar": "casa",
+        "espacio": "recamara",
+        "puerta": "se_abre"
+      },
+      "inicio": {
+        "bloques_persona": {
+          "solo": [],
+          "por_mujer": [
+            "texto_fisico",
+            "texto_exterior",
+            "render_exterior_frente_espalda",
+            "texto_interior",
+            "render_interior_frente_espalda"
+          ],
+          "hombre_visible_excitado": true
+        },
+        "previo": {
+          "tipo": "llegada",
+          "parrafos_min": 2,
+          "parrafos_max": 3
+        },
+        "ven": {
+          "aplica": true,
+          "fuente": "escenas[orden=1].estado_al_salir",
+          "dialogo_puerta": null
+        }
+      },
+      "personas": {
+        "_comments": "Solo fichas de los que LLEGAN. Los de siguen no se re-describen."
+      },
+      "acto": {
+        "formato_dominante": null,
+        "posiciones": []
+      },
+      "cierre": {
+        "aftercare": null,
+        "quedo_satisfecha": {}
+      },
+      "estado_al_salir": {},
+      "output": {
+        "renders": true,
+        "resumen": true,
+        "scenes_log": true
+      }
+    }
+  ],
+
+  "como_usar": {
+    "_comments": "Instrucciones de operación. No se narran.",
+    "paso_1": "Pedir la escena en una frase (quién, qué, si hay llegada).",
+    "paso_2": "Recibir este JSON hidratado. Adecuar nulls, ropa_propuesta, posiciones, intercambio, llegadas.",
+    "paso_3": "Decir: genera la escena en base al siguiente JSON.",
+    "paso_4": "Si alguien llega DESPUÉS, no se mete en la escena 1. Se llena escenas[1] (orden 2), despues_de=aftercare, bloques solo de los nuevos.",
+    "no_hacer": [
+      "No escribir la escena larga hasta que se diga genera.",
+      "No redescribir a quien ya estaba.",
+      "No juntar aftercare de la 1 con la puerta de la 2.",
+      "No poner dos hombres tocándose.",
+      "No pasar de 5 posiciones por escena."
+    ]
+  }
+}

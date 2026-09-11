@@ -18,3 +18,5 @@ Componentes:
 - HTML + JavaScript para visualización
 
 Autor: Jose Reyes Originales Ramos
+
+prueba de actualizacion
